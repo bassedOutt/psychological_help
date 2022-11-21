@@ -1,9 +1,12 @@
 package com.polytech.psychological_help.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -14,6 +17,8 @@ public class ConsultationDTO {
     private String userEmail;
     private String pib;
     private UserDTO consultant;
-    private String endDate;
-    private String startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime startDate;
 }

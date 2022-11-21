@@ -4,6 +4,7 @@ import com.polytech.psychological_help.dto.ConsultationDTO;
 import com.polytech.psychological_help.service.ConsultationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ConsultationController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ConsultationDTO> findAll(@RequestParam LocalDate date) {
+    public List<ConsultationDTO> findAll(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return consultationService.findAllConsultations(date);
     }
 

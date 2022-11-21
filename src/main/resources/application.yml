@@ -10,5 +10,8 @@ spring:
     properties:
       hibernate.format_sql: true
       hibernate.dialect: org.hibernate.dialect.SQLServer2012Dialect
-security:
-  ignored=/**
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+  security:
+    ignored=/**
