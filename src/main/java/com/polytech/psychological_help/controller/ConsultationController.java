@@ -34,7 +34,7 @@ public class ConsultationController {
 
     @PutMapping("/{consultationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ConsultationDTO bookConsultation(@PathVariable Integer consultationId, @RequestBody String userEmail, @RequestBody String pib) {
+    public ConsultationDTO bookConsultation(@PathVariable Integer consultationId, @RequestParam String userEmail, @RequestParam String pib) {
         return consultationService.bookConsultation(consultationId, userEmail, pib);
     }
 
