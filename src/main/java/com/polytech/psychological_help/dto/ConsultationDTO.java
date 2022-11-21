@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConsultationDTO {
     private Integer id;
-    private Double price;
-    private String userData;
+    private String userEmail;
+    private String pib;
     private UserDTO consultant;
     private String endDate;
     private String startDate;

@@ -14,15 +14,15 @@ public class Consultation {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "price")
-    private Double price;
-
     @ManyToOne
     @JoinColumn(name = "consultant_id")
     private User consultant;
 
-    @Column(name = "user_details")
-    private String userDetails;
+    @Column(name = "pib")
+    private String pib;
+
+    @Column(name = "userEmail")
+    private String userEmail;
 
     @Column(name = "end_date")
     private LocalDateTime endDate;

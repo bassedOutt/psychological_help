@@ -11,7 +11,7 @@ public interface ConsultationService {
 
     ConsultationDTO createConsultation(ConsultationDTO consultationDTO);
 
-    ConsultationDTO bookConsultation(Integer consultationId, String userData);
+    ConsultationDTO bookConsultation(Integer consultationId, String userEmail, String pib);
 
     void cancelBooking(Integer consultationId);
 

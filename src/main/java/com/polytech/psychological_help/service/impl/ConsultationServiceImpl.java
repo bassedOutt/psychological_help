@@ -31,7 +31,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     public List<ConsultationDTO> findAllConsultations(LocalDate date) {
         return consultationRepository.findAll().stream()
                 .map(MAPPER::toConsultationDTO)
-                .filter(consultationDTO -> consultationDTO.getUserData() == null)
+                .filter(consultationDTO -> consultationDTO.getUserEmail() == null)
                 .collect(Collectors.toList());
     }
 
@@ -45,10 +45,11 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
-    public ConsultationDTO bookConsultation(Integer consultationId, String userData) {
+    public ConsultationDTO bookConsultation(Integer consultationId, String userEmail, String pib) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow();
-        consultation.setUserDetails(userData);
+        consultation.setUserEmail(userEmail);
+        consultation.setPib(pib);
         return MAPPER.toConsultationDTO(consultationRepository.save(consultation));
     }
 
@@ -57,7 +58,8 @@ public class ConsultationServiceImpl implements ConsultationService {
     public void cancelBooking(Integer consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow();
-        consultation.setUserDetails(null);
+        consultation.setPib(null);
+        consultation.setUserEmail(null);
         consultationRepository.save(consultation);
     }
 

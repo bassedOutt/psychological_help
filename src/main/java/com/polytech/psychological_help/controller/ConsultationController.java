@@ -33,8 +33,8 @@ public class ConsultationController {
 
     @PutMapping("/{consultationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ConsultationDTO bookConsultation(@PathVariable Integer consultationId, @RequestBody String userData) {
-        return consultationService.bookConsultation(consultationId, userData);
+    public ConsultationDTO bookConsultation(@PathVariable Integer consultationId, @RequestBody String userEmail, @RequestBody String pib) {
+        return consultationService.bookConsultation(consultationId, userEmail, pib);
     }
 
     @DeleteMapping("/{consultationId}")
