@@ -26,6 +26,11 @@ public class ConsultationController {
         return consultationService.createConsultation(consultationDTO);
     }
 
+    @GetMapping("/consultant")
+    public List<ConsultationDTO> findUserConsultations() {
+        return consultationService.findConsultationsOfCurrentUser();
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ConsultationDTO> findAll(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {

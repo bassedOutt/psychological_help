@@ -5,6 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.polytech.psychological_help.entity.User;
+import com.polytech.psychological_help.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,7 +38,11 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 public class AuthorizationFilter implements Filter {
     public static final String BEARER = "Bearer ";
     public static final String EMAIL = "email";
+    public static final String NAME = "name";
+    public static final String SURNAME = "surname";
     private final Algorithm algorithm;
+
+    private final UserRepository userRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -51,6 +57,7 @@ public class AuthorizationFilter implements Filter {
                 String username = decodedJWT.getClaim(EMAIL).asString();
                 String[] roles = decodedJWT.getClaim(ROLE_CLAIM).asArray(String.class);
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                saveOrUpdateUser(decodedJWT);
                 if (roles != null) {
                     stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
                 }
@@ -80,5 +87,16 @@ public class AuthorizationFilter implements Filter {
             new ObjectMapper().writeValue(response.getOutputStream(), tokens);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void saveOrUpdateUser(DecodedJWT decodedJWT) {
+        String email = decodedJWT.getClaim(EMAIL).asString();
+        String name = decodedJWT.getClaim(NAME).asString();
+        String surname = decodedJWT.getClaim(SURNAME).asString();
+        User user = new User();
+        user.setEmail(email);
+        user.setName(name);
+        user.setLastName(surname);
+        userRepository.save(user);
     }
 }

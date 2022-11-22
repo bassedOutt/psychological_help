@@ -31,7 +31,18 @@ public class ConsultationServiceImpl implements ConsultationService {
     public List<ConsultationDTO> findAllConsultations(LocalDate date) {
         return consultationRepository.findAll().stream()
                 .map(MAPPER::toConsultationDTO)
+                .filter(consultationDto -> date == null || consultationDto.getStartDate().toLocalDate().equals(date))
                 .filter(consultationDTO -> consultationDTO.getUserEmail() == null)
+                .collect(Collectors.toList());
+    }
+
+    @PreAuthorize(value = "hasRole('CONSULTANT')")
+    @Override
+    public List<ConsultationDTO> findConsultationsOfCurrentUser() {
+        User user = userService.getCurrentUser();
+        return consultationRepository.findAll().stream()
+                .map(MAPPER::toConsultationDTO)
+                .filter(consultationDTO -> consultationDTO.getConsultant().getEmail().equals(user.getEmail()))
                 .collect(Collectors.toList());
     }
 
@@ -48,6 +59,9 @@ public class ConsultationServiceImpl implements ConsultationService {
     public ConsultationDTO bookConsultation(Integer consultationId, String userEmail, String pib) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow();
+        if (consultation.getUserEmail() != null) {
+            throw new RuntimeException("This consultation is already booked by another user");
+        }
         consultation.setUserEmail(userEmail);
         consultation.setPib(pib);
         return MAPPER.toConsultationDTO(consultationRepository.save(consultation));
@@ -57,7 +71,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     @Override
     public void cancelBooking(Integer consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Consultation with such id does not exist"));
         consultation.setPib(null);
         consultation.setUserEmail(null);
         consultationRepository.save(consultation);
@@ -67,7 +81,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     @Override
     public void deleteConsultation(Integer consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId)
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Consultation with such id does not exist"));
         consultationRepository.delete(consultation);
     }
 }

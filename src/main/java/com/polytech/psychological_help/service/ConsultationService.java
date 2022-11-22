@@ -9,6 +9,8 @@ public interface ConsultationService {
 
     List<ConsultationDTO> findAllConsultations(LocalDate date);
 
+    List<ConsultationDTO> findConsultationsOfCurrentUser();
+
     ConsultationDTO createConsultation(ConsultationDTO consultationDTO);
 
     ConsultationDTO bookConsultation(Integer consultationId, String userEmail, String pib);
