@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +34,10 @@ public class ConsultationServiceImpl implements ConsultationService {
                 .map(MAPPER::toConsultationDTO)
                 .filter(consultationDto -> date == null || consultationDto.getStartDate().toLocalDate().equals(date))
                 .filter(consultationDTO -> consultationDTO.getUserEmail() == null)
+                .sorted(Comparator.comparing(ConsultationDTO::getStartDate))
                 .collect(Collectors.toList());
     }
+
 
     @PreAuthorize(value = "hasRole('CONSULTANT')")
     @Override
@@ -43,6 +46,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         return consultationRepository.findAll().stream()
                 .map(MAPPER::toConsultationDTO)
                 .filter(consultationDTO -> consultationDTO.getConsultant().getEmail().equals(user.getEmail()))
+                .sorted(Comparator.comparing(ConsultationDTO::getStartDate))
                 .collect(Collectors.toList());
     }
 
