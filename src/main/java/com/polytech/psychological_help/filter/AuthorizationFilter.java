@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.polytech.psychological_help.util.Constants.ROLE_CLAIM;
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -40,6 +39,7 @@ public class AuthorizationFilter implements Filter {
     public static final String EMAIL = "email";
     public static final String NAME = "name";
     public static final String SURNAME = "surname";
+    private static final String ROLE_CLAIM = "roles";
     private final Algorithm algorithm;
 
     private final UserRepository userRepository;
